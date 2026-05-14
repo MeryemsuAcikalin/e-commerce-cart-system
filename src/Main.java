@@ -1,3 +1,6 @@
+import cart.Cart;
+import cart.OldCartAdapter;
+import decorator.WarrantyDecorator;
 import factory.CameraFactory;
 import factory.LaptopFactory;
 import factory.MouseFactory;
@@ -6,15 +9,16 @@ import model.Product;
 
 public class Main {
     public static void main(String[] args) {
-        OldCart sepet = new OldCart();
+        Cart sepet = new OldCartAdapter(new OldCart());
 
         Product camera = new CameraFactory().urunOlustur();
         Product laptop = new LaptopFactory().urunOlustur();
         Product mouse = new MouseFactory().urunOlustur();
 
-        sepet.urunEkle(camera.getUrunAdi(), camera.getUrunFiyati());
-        sepet.urunEkle(laptop.getUrunAdi(), laptop.getUrunFiyati());
-        sepet.urunEkle(mouse.getUrunAdi(), mouse.getUrunFiyati());
+        Product laptopGarantili = new WarrantyDecorator(laptop);
+        sepet.urunEkle(laptopGarantili);
+        sepet.urunEkle(camera);
+        sepet.urunEkle(mouse);
 
         sepet.sepetGoruntule();
 
